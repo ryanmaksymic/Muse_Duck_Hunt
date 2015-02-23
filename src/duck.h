@@ -19,8 +19,8 @@ public:
     duck();
     
     // Properties:
-    ofImage duckR;
-    ofImage duckL;
+    ofImage duckR1, duckR2, duckR3;
+    ofImage duckL1, duckL2, duckL3;
     ofImage duckF;
     int x, y;
     int speedX, speedY;
@@ -29,8 +29,6 @@ public:
     // Methods:
     void update(ofSoundPlayer quack_);
     void draw();
-    
-private:
 };
 
 #endif /* defined(__museTest1__duck__) */

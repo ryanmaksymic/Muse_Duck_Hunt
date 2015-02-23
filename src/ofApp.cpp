@@ -1,10 +1,6 @@
 #include "ofApp.h"
 #include "duck.h"
 
-// Blinking:
-int blinkState;
-bool blinked;
-
 // Font:
 ofTrueTypeFont font;
 
@@ -21,12 +17,16 @@ ofImage grass;
 ofImage crosshairs;
 
 // Ducks:
-#define NUM_DUCKS 4
+#define NUM_DUCKS 8
 duck ducks[NUM_DUCKS];
 int killCount = 0;
 
 // Crosshairs variables:
 int crosshairsX, crosshairsY;
+
+// Blinking:
+int blinkState;
+bool blinked;
 
 // Game over state:
 bool gameOver = false;
@@ -53,18 +53,23 @@ void ofApp::setup()
     sky = ofColor(150, 200, 255);
     
     // Load images:
-    grass.loadImage("images/grass.gif");
+    //grass.loadImage("images/grass.gif");
+    grass.loadImage("images/grass.png");
     crosshairs.loadImage("images/crosshairs.png");
     
     for (int i = 0; i < NUM_DUCKS; i++)
     {
-        ducks[i].duckR.loadImage("images/duck_1.gif");
-        ducks[i].duckL.loadImage("images/duck_2.gif");
+        ducks[i].duckR1.loadImage("images/duckR1.gif");
+        ducks[i].duckR2.loadImage("images/duckR2.gif");
+        ducks[i].duckR3.loadImage("images/duckR3.gif");
+        ducks[i].duckL1.loadImage("images/duckL1.gif");
+        ducks[i].duckL2.loadImage("images/duckL2.gif");
+        ducks[i].duckL3.loadImage("images/duckL3.gif");
         ducks[i].duckF.loadImage("images/duck_3.gif");
     }
     
     // Play opening music:
-    start.play();
+    //start.play();
 }
 
 
@@ -105,8 +110,8 @@ void ofApp::update()
             //cout << "X: " << accelX << ", Y: " << accelY << endl;
             
             // Map accelerometer values to crosshairs:
-            crosshairsX = ofMap(accelX, -280, 520, 0, ofGetWidth(), true);
-            crosshairsY = ofMap(accelY, -40, 420, 0, ofGetHeight(), true);
+            //crosshairsX = ofMap(accelX, -280, 520, 0, ofGetWidth(), true);
+            //crosshairsY = ofMap(accelY, -40, 420, 0, ofGetHeight(), true);
         }
     }
     
@@ -153,11 +158,11 @@ void ofApp::draw()
     if (gameOver)
     {
         // Display "YOU WIN!":
-        font.drawString("YOU WIN!", 125, 50);
+        font.drawString("YOU WIN!", 610, 70);
         
         // Display "NEW GAME" button:
         ofSetColor(255, 0, 0);
-        font.drawString("NEW GAME", 125, 300);
+        font.drawString("NEW GAME", 600, 830);
         ofSetColor(255);
     }
 }
@@ -176,7 +181,7 @@ void ofApp::gunshot()
     for (int i = 0; i < NUM_DUCKS; i++)
     {
         // If duck has been hit:
-        if ((crosshairsX > ducks[i].x && crosshairsX < ducks[i].x + ducks[i].duckR.width) && (crosshairsY > ducks[i].y && crosshairsY < ducks[i].y + ducks[i].duckR.height) && ducks[i].flying)
+        if ((crosshairsX > ducks[i].x && crosshairsX < ducks[i].x + ducks[i].duckR1.width) && (crosshairsY > ducks[i].y && crosshairsY < ducks[i].y + ducks[i].duckR1.height) && ducks[i].flying)
         {
             // Update duck state:
             ducks[i].flying = false;
@@ -202,7 +207,7 @@ void ofApp::gunshot()
     if (gameOver)
     {
         // If "NEW GAME" button clicked:
-        if ((crosshairsX > 120 && crosshairsX < 360) && (crosshairsY > 270 && crosshairsY < 310))
+        if ((crosshairsX > 120 && crosshairsX < 360) && (crosshairsY > 660 && crosshairsY < 700))
         {
             // Update state:
             gameOver = false;
@@ -236,10 +241,10 @@ void ofApp::gunshot()
 void ofApp::mouseMoved(int x, int y )
 {
     // Update crosshairs position:
-    //crosshairsX = x;
-    //crosshairsY = y;
+    crosshairsX = x;
+    crosshairsY = y;
     
-    //cout << "X: " << x << ", Y: " << y << endl;
+    cout << "X: " << x << ", Y: " << y << endl;
 }
 
 
@@ -256,7 +261,7 @@ void ofApp::mousePressed(int x, int y, int button)      // Trigger pulled
     for (int i = 0; i < NUM_DUCKS; i++)
     {
         // If duck has been hit:
-        if ((x > ducks[i].x && x < ducks[i].x + ducks[i].duckR.width) && (y > ducks[i].y && y < ducks[i].y + ducks[i].duckR.height))
+        if ((x > ducks[i].x && x < ducks[i].x + ducks[i].duckR1.width) && (y > ducks[i].y && y < ducks[i].y + ducks[i].duckR1.height) && ducks[i].flying)
         {
             // Update duck state:
             ducks[i].flying = false;
@@ -282,7 +287,7 @@ void ofApp::mousePressed(int x, int y, int button)      // Trigger pulled
     if (gameOver)
     {
         // If "NEW GAME" button clicked:
-        if ((x > 120 && x < 360) && (y > 270 && y < 310))
+        if ((x > 590 && x < 840) && (y > 790 && y < 840))
         {
             // Update state:
             gameOver = false;
@@ -297,7 +302,7 @@ void ofApp::mousePressed(int x, int y, int button)      // Trigger pulled
                 ducks[i].falling = false;
                 ducks[i].dead = false;
                 
-                ducks[i].x = ofRandom(10, 400);
+                ducks[i].x = ofRandom(10, 1430);
                 ducks[i].y = ofRandom(10, 330);
                 
                 do
@@ -340,12 +345,10 @@ void ofApp::windowResized(int w, int h)
 {
 }
 
-
 //--------------------------------------------------------------
 void ofApp::gotMessage(ofMessage msg)
 {
 }
-
 
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo)

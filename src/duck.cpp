@@ -12,7 +12,7 @@
 duck::duck()
 {
     // Random position:
-    x = ofRandom(10, 400);
+    x = ofRandom(10, 1430);
     y = ofRandom(10, 330);
     
     // Random non-zero speeds:
@@ -23,14 +23,14 @@ duck::duck()
     }
     while (speedX == 0 || speedY == 0);
     
-    cout << "speedX = " << speedX << ", speedY = " << speedY << endl;
-    
     // Initial state:
     flying = true;
     falling = false;
     dead = false;
 }
 
+
+// Update:
 void duck::update(ofSoundPlayer quack_)
 {
     // Flying state:
@@ -40,7 +40,7 @@ void duck::update(ofSoundPlayer quack_)
         x += speedX;
         
         // If X boundary is hit:
-        if (x < (0 - duckR.width) || x > ofGetWidth())
+        if (x < 0 || x > (ofGetWidth() - duckR1.width))
         {
             // Reverse X direction:
             speedX *= -1;
@@ -59,7 +59,7 @@ void duck::update(ofSoundPlayer quack_)
     // Falling state:
     else if (falling)
     {
-        // Update Y position:
+        // Increment Y position:
         y += speedY;
         
         // When duck hits the ground
@@ -78,23 +78,49 @@ void duck::update(ofSoundPlayer quack_)
     }
 }
 
+
+// Draw:
 void duck::draw()
 {
+    // Flying state:
     if (flying)
     {
         // If traveling right:
         if (speedX > 0)
         {
-            // Draw right-facing duck:
-            duckR.draw(x, y);
+            // Draw one of three right-facing ducks:
+            switch ((x/20)%3)
+            {
+                case 0:
+                    duckR1.draw(x, y);
+                    break;
+                case 1:
+                    duckR2.draw(x, y);
+                    break;
+                case 2:
+                    duckR3.draw(x, y);
+                    break;
+            }
         }
         // If traveling left:
         else if (speedX < 0)
         {
-            // Draw left-facing duck:
-            duckL.draw(x, y);
+            // Draw one of three left-facing ducks
+            switch ((x/20)%3)
+            {
+                case 0:
+                    duckL1.draw(x,y);
+                    break;
+                case 1:
+                    duckL2.draw(x,y);
+                    break;
+                case 2:
+                    duckL3.draw(x,y);
+                    break;
+            }
         }
     }
+    // Falling state:
     else if (falling)
     {
         // Draw falling duck:
